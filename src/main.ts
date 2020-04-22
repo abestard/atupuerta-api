@@ -8,8 +8,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const options = new DocumentBuilder()
-    .setTitle('Backend API')
-    .setDescription('Backend API Description')
+    .setTitle('ATuPuerta API')
+    .setDescription('ATuPuerta API Description')
     .setVersion('1.0')
     .build()
 
