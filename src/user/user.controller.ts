@@ -6,7 +6,10 @@ import { CreateUserDTO } from './dto/user.dto'
 
 import { UserService } from './user.service';
 
+import { ApiBody, ApiQuery, ApiTags, ApiParam }from '@nestjs/swagger';
+
 @Controller('user')
+@ApiTags('user')
 export class UserController {
 
     constructor(
@@ -16,6 +19,7 @@ export class UserController {
 
     // /user/create
     @Post('/create')
+    @ApiBody({type: CreateUserDTO})
     async createUser(@Res() res, @Body() createUserDTO: CreateUserDTO) {    
         try {
             const user = await this.userService.createUser(createUserDTO)
@@ -52,6 +56,11 @@ export class UserController {
     // etc
     // Query with password field is not accepted
     @Get('/')
+    @ApiQuery({name: 'username', required: false})
+    @ApiQuery({name: 'firstName', required: false})
+    @ApiQuery({name: 'lastName', required: false})
+    @ApiQuery({name: 'phoneNumber', required: false})
+    @ApiQuery({name: 'movilNumber', required: false})
     async getUser(@Res() res, @Query() query) {
         try {
             if (query.password) return res.status(HttpStatus.FORBIDDEN).json({
@@ -75,6 +84,10 @@ export class UserController {
 
     // /user/delete/userid
     @Delete('/delete/:userId')
+    @ApiParam({
+        name: 'userId',
+        required: true
+    })
     async deleteUser(@Res() res, @Param('userId') userId) {
         try {
             const user = await this.userService.deleteUser(userId)
@@ -92,6 +105,10 @@ export class UserController {
     }
 
     @Put('/update/:userId')
+    @ApiParam({
+        name: 'userId',
+        required: true
+    })
     async updateUser(@Res() res, @Param('userId') userId, @Body() userData) {
         try {
             const user = await this.userService.updateUser(userId, userData)
